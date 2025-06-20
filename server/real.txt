@@ -1,0 +1,28 @@
+{
+  "type": "service_account",
+  "project_id": "email-sender-1fae3",
+  "private_key_id": "fcc394fbec4e1e834fcfc9e6eff99197f4c523fa",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDitBnDwdMffhe2\nWfuuKyTpngPiNqTxfb+/frmYI5t9NTvMGPUh9v/nnisi3zcnMyJ+w8sz1lwuTLU4\nEhks0m184D/rvOXUEcYGwnV272DaOdOsssFn61e+pWmK2LwLfa+pWECQTAWXgzN5\nNs+UyObaU0mKgihIX9+eELOsFAyWHsCrRZHMZSpzFBv2mIUXZnN+D6Hc0Msj+OKr\nPvFqVuPZjaPBmJG12QAppTWMROyP58XgZ1E8HsBNS4e6j27urVEd8iZQUgmOQxWA\nTo/p5y91vVWiUDbcHuremqQpijowNEx18PA4yskff+VzGCow6CtrhfhEdI8pS3OG\npmQ3inRvAgMBAAECggEACMvyP/1SYuNyqhm9wVldOk9uWSXDqrc1bInPS8795pLd\nOiMxx9qcvXEOvXCp5DSAvyh7xwwnUYiac42IOowDwZe2A0C2Lk9uPq7m/fF18aHS\ny9230X95TSV//epBCbUbztdk0fSRNvrZUXfGAED3bDtVHDHGvGAz/h8pyaCRiHWg\nT2Cy2zyLYkYSdt8FxSzhvzLfnMGYVQdVXR04kzHvVO1IzIl99GyoPtvtUqTO8uRV\ns/HIgG39L+9mgvLdgivyikxXS5V4330gihcgfF8gGDtQ+oVPWjiTNOv6rXN2sHzo\nydfXEtwBFMEbKirs75WjIRWTUViPjn7fejwSNH79qQKBgQD74eaU+AKkd/PpZ17q\nxod+aFkWiYbdXzzKegqZJELPvBsZuSqZJe/BTiAiGMnjw+zSjoEE6KvWujZOshZc\ntHay2kGNtllLehTmiDs8+KOjZ6e0IXZPPoe0m858eqn7i5LCcqFETBcVvIKMKm0g\nLonkI4Tr+k08zZfsmf5jaHOKXQKBgQDmaNQ+K4X/NEJzfxGsapOQgkWc+sfBaVyF\nRZTRCLhRCIwJMfnziYHkZ7vSQtgxmQNyiWtwCreBl3QB7qnzN8BcmpQl2M/s/oli\n5GDH3npdTxMxk4vmQOHda9n8p4NQQ9QMADpWloWZvZKMMc6qUqTgOYmdXGMHJzWx\nsp2w0jDFOwKBgDu50Sc5t8av+tI5hLQ+5xn+PEGv0p7jWlLYpXKyunTvsa1jzsoJ\nyNQZZl0va4/qgVlcGRPE6Bo+hWobqFnLIOo//pNPzdSr2hDf9Mv8WTEB/y4jUR5x\nQVR+LXQu0eenrOEWtU6wjDjHPl1mIgIjhubl1TrvWykzxvZ/fWas+dixAoGBANBz\nSIlSYPEIu5G4BSpCZWxYn1gs/el6Q80CrWcMB4ywOdjb0PFGlzAntSG9fdApSZgm\nwP9lgq2IctiIrlKvPqXI53zyEPKtOWgxi2lnWrbuIkQ441mVm4Hx4A4XEtLb+ow8\n7IqHtSjo/Bs/uGQZTrbY9ypZefHvxEEWglmFX8AfAoGBANHDL+6CsNLK7B8Jh+eu\ntJOADflB7VbxWMKj8g1udRJcZDhMww9ovthj3+cc+Eo5cVDBydM+TreIIidnveDz\nABat+DUyjGC9tLTRCz+LYVUWGZiEzNiHP8qVSDSV8Im0o+0SE12OuAtZjYvDXfKq\nm80fJLGS9bibcgGjBac0LpA3\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@email-sender-1fae3.iam.gserviceaccount.com",
+  "client_id": "112189997985708957813",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40email-sender-1fae3.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
+
+{
+  "type": "service_account",
+  "project_id": "fir-1a153",
+  "private_key_id": "a4b78447244466c3d43cd5bf541ed535c31e0bf4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDZsjEn8U2c/hh9\ntccnIlYVs1zhdCk3nd2u7AYummkPD0m8+knHNonhjNsQNW4zYSKFpPl4eJgVW3al\n8fVCpcEaDOGtQMRhVgENYZmPN+ujp4wKaMYGe+7uApIrc/NrfVGN/9e3Z2+Cb3q4\nS4W99WfTO9R4388UvX5IglcV7NmgobIN6cMGe49pascs2eGep2FpdICpIPPabdWV\n8rPrJA6PCNLIXoxDWND5KoGcvJ8mFhuNuhkXQ+ucsq00gS4Y8WPpW6jtGwLZA9DK\nzr0zdyU+nTmCHPfwO7IBMqJ0DeIVE9Ou/Ui5RZOW27Mg5D7yVKQ86BJDTfE1kJBF\nErVjTka5AgMBAAECggEAFwzgWhGZjXg1KShkci8XTNxtRvz4+UfYp3Mb03brjVnp\nzZ31zmdmsZBryJtTtBKCqIJ3nMsuFULWPQtx0/D/kY3QHntnX8QOv/c33nuGEpHE\nyPxfjWO1gJOanQm9ukGubznqAiQsYTQDGzz56AtyRyJEZNkT0OcgljZg2LQ3teN/\nG1cxM5HNHzkc36+YL/6XNIBFqpyUXybQm3knZZSToZm8ZBZ9jhDt6gVV5R9Kd8Cv\nTnCEoNzFYJDmh2HGwMBlbvpyPwOlscWBmBvXawDp4PRE9TZBs9dVQqeqngE2SKsF\nc/ftujA4lJqfi5YjUUgN4t3qNUkR4lpZfXtAHqEalQKBgQDufY4jvEriCEgcJMPf\nD0mQINbsBYqAWAmFKKPNKGaqDKhQz7tt6z5yovPdV1V8+eDH5V7j9z/HufHiN2qd\nSROtqVLLj0bU3VAc8aMyY5JgRmRkLrHmAws11gI14LgCzpD/xNPW4HWLUZs0BX0T\nGAaLtIfBSSRCnmPpQeWa3o+sNQKBgQDprc4H3imIG9qDhzJ3odkezHnmeAcxSiTL\ntUPNROmsVKed1xH49i8e6ajxtUdr/bza6ChU3Y9G92lPa0WnHwLwHCl39lL8nbQ5\nVhi8Wp8YQdyD7NxlGq9EuvVZw4NP3SDPw8fShFxGZwTILnp6dmXr7wZ0cOpz6Hc0\n9YR1izOY9QKBgERfoLGkGP/mie3vqGw58Mgucg+moweatdgER7nYvF5CVLseY0jn\nKbcp+qpZkHvNE+GbY/INf66eI7fMVXeUbNzb743GnPMIJCC4MiaPH3cUl1GVhZFB\nDCS6H1YdAARl/nIllupC3dA8bDek3y/rMm05K7aBZrDmwhQsvUwCRMSFAoGAEbMc\ne/QT6T9S2cuPwwf7Th3mzdIhmVYoW1WrgQzLNkZjO81iixz6jLjeFxDIDCH4AAy9\noU/23kU3MNDLQdFTg6Reb7u0pXW8hOtEjF/A1TGH5mY2e2H+DJKsqtPoSlBRf+sw\nY32rD5oV/qOmm0gEiE5eistSttzQyq4eDlkw21ECgYEAwWEJsGFeLxm21WZr2edP\nmKuehpVokTbd3O5nRK76T9L0mLBEWgrYbxbS4ZZwGf9N1us5pqe+mZS3iEMZ8srb\nC2A/yUV6zLqFsZJJH13fpo0mZPZIwEy22Y06tv7JtFO0XThvh2Ocq3m/t54dBDmu\nqapd5kGwGWGrVwibioJJ0Dk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@fir-1a153.iam.gserviceaccount.com",
+  "client_id": "102379738495796865343",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40fir-1a153.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
