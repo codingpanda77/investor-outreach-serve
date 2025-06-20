@@ -372,3 +372,21 @@ exports.getCampaignReport = async (req, res) => {
     res.status(500).json({ message: "Failed to get campaign report" });
   }
 };
+
+exports.getEmailCampaignReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const emailCampaign = await EmailCampaign.findById(id).lean();
+    console.log(emailCampaign);
+    if (!emailCampaign)
+      return res.status(404).json({ message: "Campaign not found" });
+
+    res.json({
+      emailCampaign,
+    });
+  } catch (err) {
+    console.error("Error fetching report:", err);
+    res.status(500).json({ message: "Failed to get campaign report" });
+  }
+};
