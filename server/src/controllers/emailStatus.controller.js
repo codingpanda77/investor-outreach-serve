@@ -9,7 +9,7 @@ const EmailReply = require("../models/emailReply.model");
 
 // Send Emails
 exports.sendEmail = async (req, res) => {
-  const { campaignId, content, recipients, sender, subject } = req.body;
+  const { campaignId, content, recipients, sender, subject, type } = req.body;
 
   if (!campaignId || !content?.html || !recipients || !subject) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -88,6 +88,7 @@ exports.sendEmail = async (req, res) => {
       sentAt: new Date(),
       sentCount: recipientsData.length,
       recipientEmails: recipientsData,
+      type: type || "regular",
     });
 
     await Campaign.findByIdAndUpdate(campaignId, {
@@ -110,31 +111,53 @@ exports.sendEmail = async (req, res) => {
 exports.trackOpen = async (req, res) => {
   try {
     const { messageId, email } = req.query;
-    console.log(messageId, email);
+    if (!messageId || !email) {
+      return res.status(400).json({ message: "Missing messageId or email" });
+    }
 
-    const campaign = await EmailCampaign.findOneAndUpdate(
+    // Find the email campaign and check if already opened
+    const campaign = await EmailCampaign.findOne({
+      "recipientEmails.messageId": messageId,
+    });
+
+    if (!campaign) {
+      return res.status(404).json({ message: "Campaign not found" });
+    }
+
+    const recipient = campaign.recipientEmails.find(
+      (r) => r.messageId === messageId
+    );
+
+    // If already opened, skip increment
+    if (recipient?.opened) {
+      const transparent1x1PNG = Buffer.from(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=",
+        "base64"
+      );
+      res.setHeader("Content-Type", "image/png");
+      return res.send(transparent1x1PNG);
+    }
+
+    // Update the recipient opened status and campaign stats
+    await EmailCampaign.updateOne(
       { "recipientEmails.messageId": messageId },
       {
-        $inc: { openedCount: 1 },
-        $addToSet: { openedRecipients: email?.toLowerCase() },
         $set: {
           "recipientEmails.$.opened": true,
           "recipientEmails.$.openedAt": new Date(),
         },
+        $inc: { openedCount: 1 },
       }
     );
 
-    if (campaign) {
-      await Campaign.findByIdAndUpdate(campaign.campaignRef, {
-        $inc: { totalEmailsOpened: 1 },
-      });
-    }
+    await Campaign.findByIdAndUpdate(campaign.campaignRef, {
+      $inc: { totalEmailsOpened: 1 },
+    });
 
     const transparent1x1PNG = Buffer.from(
       "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=",
       "base64"
     );
-
     res.setHeader("Content-Type", "image/png");
     res.send(transparent1x1PNG);
   } catch (err) {
