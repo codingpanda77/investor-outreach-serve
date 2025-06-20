@@ -10,11 +10,11 @@ const CampaignSchema = new mongoose.Schema(
     //   html: { type: String },
     //   text: { type: String },
     // },
-    type: {
-      type: String,
-      enum: ["regular", "ai", "followUp"],
-      default: "regular",
-    },
+    // type: {
+    //   type: String,
+    //   enum: ["regular", "ai", "followUp"],
+    //   default: "regular",
+    // },
     // templateId: { type: String }, // if using SES template
     // utmParams: { type: mongoose.Schema.Types.Mixed }, // optional UTM tracking
 
