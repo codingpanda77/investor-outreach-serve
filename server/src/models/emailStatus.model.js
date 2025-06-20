@@ -31,6 +31,11 @@ const EmailStatusSchema = new mongoose.Schema(
     bouncedCount: { type: Number, default: 0 },
     complainedCount: { type: Number, default: 0 },
     repliedCount: { type: Number, default: 0 },
+    type: {
+      type: String,
+      enum: ["regular", "ai", "followUp"],
+      default: "regular",
+    },
 
     // email: { type: String, required: true },
     // messageId: { type: String, required: true, unique: true },
