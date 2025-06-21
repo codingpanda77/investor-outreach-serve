@@ -81,10 +81,10 @@ const investorSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    list_id: {
-      type: String,
-      required: true,
-    },
+    // list_id: {
+    //   type: String,
+    //   required: true,
+    // },
   },
   { timestamps: true }
 );

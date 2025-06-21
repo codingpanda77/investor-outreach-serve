@@ -32,6 +32,8 @@ const {
   updateClientData,
   deleteClientData,
   getActiveClientData,
+  verifyClientEmail,
+  updateClientEmailVerification,
 } = require("./controllers/company.controller");
 
 // IMAP Configuration for Monitoring Replies
@@ -511,26 +513,29 @@ app.delete("/campaign/:id", async (req, res) => {
 });
 
 // Send Email Endpoint
-app.post("/clients/verify-email", async (req, res) => {
-  const { email } = req.body;
+// app.post("/clients/verify-email", async (req, res) => {
+//   const { email } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ message: "Email is required" });
-  }
+//   if (!email) {
+//     return res.status(400).json({ message: "Email is required" });
+//   }
 
-  try {
-    const command = new VerifyEmailIdentityCommand({ EmailAddress: email });
-    await sesClient.send(command);
+//   try {
+//     const command = new VerifyEmailIdentityCommand({ EmailAddress: email });
+//     await sesClient.send(command);
 
-    res.status(200).json({ message: `Verification email sent to ${email}` });
-  } catch (error) {
-    console.error("Error sending verification email:", error);
-    res.status(500).json({
-      message: "Failed to send verification email",
-      error: error.message,
-    });
-  }
-});
+//     res.status(200).json({ message: `Verification email sent to ${email}` });
+//   } catch (error) {
+//     console.error("Error sending verification email:", error);
+//     res.status(500).json({
+//       message: "Failed to send verification email",
+//       error: error.message,
+//     });
+//   }
+// });
+
+app.post("/clients/verify-email", verifyClientEmail);
+app.post("/clients/get-verify-status", updateClientEmailVerification);
 
 // Send Email Endpoint
 app.post("/email/send", async (req, res) => {

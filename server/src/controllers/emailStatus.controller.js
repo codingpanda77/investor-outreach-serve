@@ -348,31 +348,6 @@ exports.storeReply = async (req, res) => {
 };
 
 // Get Campaign Report
-exports.getCampaignReport = async (req, res) => {
-  try {
-    const { campaignId } = req.params;
-
-    const campaign = await Campaign.findById(campaignId).lean();
-    if (!campaign)
-      return res.status(404).json({ message: "Campaign not found" });
-
-    const emailCampaigns = await EmailCampaign.find({
-      campaignRef: campaignId,
-    }).lean();
-
-    const replies = await EmailReply.find({ campaignRef: campaignId }).lean();
-
-    res.json({
-      campaign,
-      emailCampaigns,
-      totalReplies: replies.length,
-    });
-  } catch (err) {
-    console.error("Error fetching report:", err);
-    res.status(500).json({ message: "Failed to get campaign report" });
-  }
-};
-
 exports.getEmailCampaignReport = async (req, res) => {
   try {
     const { id } = req.params;

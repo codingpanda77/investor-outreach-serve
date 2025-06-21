@@ -11,15 +11,24 @@ const {
   updateInvestor,
   deleteInvestor,
 } = require("../controllers/investor.controller");
+const verifyFirebaseToken = require("../middlewares/firebaseAuth.middleware");
 
 // router.use(verifyJWT);
 
-router.route("/").get(getAllInvestors).post(bulkAddInvestors);
+router
+  .route("/")
+  .get(verifyFirebaseToken, getAllInvestors)
+  .post(verifyFirebaseToken, bulkAddInvestors);
 
-router.route("/:id").put(updateInvestor).delete(deleteInvestor); // Implement handler later
+router
+  .route("/:id")
+  .put(verifyFirebaseToken, updateInvestor)
+  .delete(verifyFirebaseToken, deleteInvestor); // Implement handler later
 
-router.route("/upload-csv").post(upload.single("file"), uploadCSV);
+router
+  .route("/upload-csv")
+  .post(verifyFirebaseToken, upload.single("file"), uploadCSV);
 
-router.route("/matchmaking").get(getPaginatedInvestors);
+router.route("/matchmaking").get(verifyFirebaseToken, getPaginatedInvestors);
 
 module.exports = router;

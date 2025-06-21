@@ -84,12 +84,26 @@ const companySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    campaign_ids: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "Campaign",
-    },
   },
   { timestamps: true }
 );
+
+companySchema.pre("findOneAndDelete", async function (next) {
+  try {
+    const companyId = this.getQuery()._id;
+
+    const campaigns = await mongoose
+      .model("Campaign")
+      .find({ company_id: companyId });
+
+    for (const campaign of campaigns) {
+      await mongoose.model("Campaign").findOneAndDelete({ _id: campaign._id });
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = mongoose.model("Company", companySchema);

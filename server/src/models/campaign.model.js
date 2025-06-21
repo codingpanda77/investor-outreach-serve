@@ -2,32 +2,7 @@ const mongoose = require("mongoose");
 
 const CampaignSchema = new mongoose.Schema(
   {
-    // campaignId: { type: String, required: true, unique: true },
     name: { type: String },
-    // subject: { type: String },
-    // from: { type: String, required: true },
-    // content: {
-    //   html: { type: String },
-    //   text: { type: String },
-    // },
-    // type: {
-    //   type: String,
-    //   enum: ["regular", "ai", "followUp"],
-    //   default: "regular",
-    // },
-    // templateId: { type: String }, // if using SES template
-    // utmParams: { type: mongoose.Schema.Types.Mixed }, // optional UTM tracking
-
-    // sentAt: { type: Date },
-    // totalRecipients: { type: Number, default: 0 },
-
-    // stats: {
-    //   delivered: { type: Number, default: 0 },
-    //   bounced: { type: Number, default: 0 },
-    //   opened: { type: Number, default: 0 },
-    //   replied: { type: Number, default: 0 },
-    //   complained: { type: Number, default: 0 },
-    // },
     totalEmailsSent: { type: Number, default: 0 },
     totalEmailsOpened: { type: Number, default: 0 },
     totalDelivered: { type: Number, default: 0 },
@@ -43,5 +18,18 @@ const CampaignSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+CampaignSchema.pre("findOneAndDelete", async function (next) {
+  try {
+    const campaignId = this.getQuery()._id;
+
+    await mongoose.model("EmailStatus").deleteMany({ campaignRef: campaignId });
+    await mongoose.model("EmailReply").deleteMany({ campaignRef: campaignId });
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = mongoose.model("Campaign", CampaignSchema);

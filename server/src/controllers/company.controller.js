@@ -1,4 +1,9 @@
 const Company = require("../models/company.model");
+const {
+  VerifyEmailIdentityCommand,
+  GetIdentityVerificationAttributesCommand,
+} = require("@aws-sdk/client-ses");
+const { sesClient } = require("../config/aws.config");
 
 exports.addClientData = async (req, res) => {
   try {
@@ -181,7 +186,7 @@ exports.deleteClientData = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deletedClient = await Company.findByIdAndDelete(id);
+    const deletedClient = await Company.findOneAndDelete({ _id: id });
 
     if (!deletedClient) {
       return res.status(404).json({ error: "Client not found" });
@@ -190,5 +195,88 @@ exports.deleteClientData = async (req, res) => {
     res.status(200).json({ message: "Client deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+exports.verifyClientEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const client = await Company.findOne({ email });
+    if (!client) return res.status(404).json({ message: "Client not found" });
+
+    if (client.email_verified) {
+      return res.status(200).json({
+        email,
+        alreadyVerified: true,
+        message: `${email} is already verified in the system.`,
+      });
+    }
+
+    const command = new VerifyEmailIdentityCommand({ EmailAddress: email });
+    await sesClient.send(command);
+
+    res.status(200).json({
+      email,
+      success: true,
+      message: `Verification email sent successfully to ${email}`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to send verification email",
+      error: error.message,
+    });
+  }
+};
+
+exports.updateClientEmailVerification = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const command = new GetIdentityVerificationAttributesCommand({
+      Identities: [email],
+    });
+
+    const response = await sesClient.send(command);
+    const status = response.VerificationAttributes?.[email]?.VerificationStatus;
+
+    if (!status) {
+      return res
+        .status(404)
+        .json({ message: "Email not found in SES identities" });
+    }
+
+    const isVerified = status === "Success";
+
+    const updatedClient = await Company.findOneAndUpdate(
+      { email },
+      { email_verified: isVerified },
+      { new: true }
+    );
+
+    if (!updatedClient) {
+      return res.status(404).json({ message: "Client not found in database" });
+    }
+
+    res.status(200).json({
+      email,
+      verified: isVerified,
+      success: true,
+      message: `Email verification status updated to "${status}"`,
+    });
+  } catch (error) {
+    console.error("Error updating verification status:", error);
+    res.status(500).json({
+      message: "Failed to update verification status",
+      error: error.message,
+    });
   }
 };

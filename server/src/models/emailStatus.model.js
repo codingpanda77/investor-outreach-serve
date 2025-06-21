@@ -36,32 +36,6 @@ const EmailStatusSchema = new mongoose.Schema(
       enum: ["regular", "ai", "followUp"],
       default: "regular",
     },
-
-    // email: { type: String, required: true },
-    // messageId: { type: String, required: true, unique: true },
-
-    // status: {
-    //   type: String,
-    //   enum: ["SENT", "DELIVERED", "BOUNCED", "COMPLAINED"],
-    //   default: "SENT",
-    // },
-    // deliveryAt: Date,
-
-    // opened: { type: Boolean, default: false },
-    // openedAt: Date,
-
-    // replied: { type: Boolean, default: false },
-    // replyAt: Date,
-    // replySubject: String,
-    // replyBody: String,
-
-    // bounceType: { type: String }, // Permanent, Transient
-    // bounceSubType: { type: String }, // General, Suppressed, etc.
-
-    // meta: {
-    //   ip: String,
-    //   userAgent: String,
-    // },
   },
   { timestamps: true }
 );

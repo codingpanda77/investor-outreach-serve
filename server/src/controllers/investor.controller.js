@@ -2,6 +2,7 @@ const fs = require("fs").promises;
 const Papa = require("papaparse");
 const Investor = require("../models/investor.model");
 const transformFrontendToDB = require("../utils/functions");
+const { EXPECTED_KEYS } = require("../utils/data");
 
 exports.getPaginatedInvestors = async (req, res) => {
   try {
@@ -75,7 +76,6 @@ exports.getPaginatedInvestors = async (req, res) => {
 };
 
 // Controller to add investors data manually
-
 exports.bulkAddInvestors = async (req, res) => {
   try {
     const investorData = req.body;
@@ -86,54 +86,16 @@ exports.bulkAddInvestors = async (req, res) => {
         .json({ error: "Invalid request: Array of investor data is required" });
     }
 
-    const invalid = investorData.find(
-      (inv) => !inv["partner_email"] || !inv["list_id"]
-    );
+    const invalid = investorData.find((inv) => !inv["partner_email"]);
     if (invalid) {
       return res.status(400).json({
-        error: "Each investor must have 'partner_email' and 'listId'",
-      });
-    }
-
-    const cleanedData = investorData.map(normalizeInvestor);
-    const result = await Investor.insertMany(cleanedData);
-
-    // const result = await Investor.insertMany(investorData);
-
-    res.status(201).json({
-      ids: result.map((doc) => doc._id),
-      message: `Successfully added ${result.length} investors`,
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: "Failed to add investors",
-      details: error.message,
-    });
-  }
-};
-
-exports.bulkAddInvestors = async (req, res) => {
-  try {
-    const investorData = req.body;
-
-    if (!Array.isArray(investorData) || investorData.length === 0) {
-      return res
-        .status(400)
-        .json({ error: "Invalid request: Array of investor data is required" });
-    }
-
-    const invalid = investorData.find(
-      (inv) => !inv["partner_email"] || !inv["list_id"]
-    );
-    if (invalid) {
-      return res.status(400).json({
-        error: "Each investor must have 'partner_email' and 'list_id'",
+        error: "Each investor must have partner_email",
       });
     }
 
     // Normalize each investor
     const normalizedData = investorData.map((item) =>
-      transformFrontendToDB(item, item.list_id)
+      transformFrontendToDB(item)
     );
 
     const result = await Investor.insertMany(normalizedData);
@@ -150,58 +112,14 @@ exports.bulkAddInvestors = async (req, res) => {
   }
 };
 
-// Controller to add investors data by csv file
-// exports.uploadCSV = async (req, res) => {
-//   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-
-//   const { listId } = req.body;
-//   if (!listId) return res.status(400).json({ error: "listId is required" });
-
-//   try {
-//     const filePath = req.file.path;
-//     const fileContent = await fs.readFile(filePath, "utf-8");
-
-//     const { data, errors } = Papa.parse(fileContent, {
-//       header: true,
-//       skipEmptyLines: true,
-//     });
-
-//     // Remove uploaded file
-//     fs.unlink(filePath).catch(console.error);
-
-//     if (errors.length > 0) {
-//       return res
-//         .status(400)
-//         .json({ error: "Invalid CSV format", details: errors });
-//     }
-
-//     const records = transformFrontendToDB(data, listId);
-
-//     await Investor.insertMany(records);
-
-//     res.status(201).json({
-//       success: true,
-//       message: `CSV uploaded successfully! ${records.length} records inserted.`,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       error: "Failed to upload CSV",
-//       details: error.message,
-//     });
-//   }
-// };
-
 exports.uploadCSV = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-
-  const { listId } = req.body;
-  if (!listId) return res.status(400).json({ error: "listId is required" });
 
   try {
     const filePath = req.file.path;
     const fileContent = await fs.readFile(filePath, "utf-8");
 
-    const { data, errors } = Papa.parse(fileContent, {
+    const { data, errors, meta } = Papa.parse(fileContent, {
       header: true,
       skipEmptyLines: true,
     });
@@ -214,8 +132,25 @@ exports.uploadCSV = async (req, res) => {
         .json({ error: "Invalid CSV format", details: errors });
     }
 
+    // Validate headers
+    const csvKeys = meta.fields || [];
+    const missingKeys = EXPECTED_KEYS.filter((key) => !csvKeys.includes(key));
+    const unexpectedKeys = csvKeys.filter(
+      (key) => !EXPECTED_KEYS.includes(key)
+    );
+
+    if (missingKeys.length > 0 || unexpectedKeys.length > 0) {
+      return res.status(400).json({
+        error: "CSV header mismatch",
+        missingKeys,
+        unexpectedKeys,
+        expectedKeys: EXPECTED_KEYS,
+        receivedKeys: csvKeys,
+      });
+    }
+
     // Normalize CSV records
-    const records = transformFrontendToDB(data, listId);
+    const records = transformFrontendToDB(data);
 
     const result = await Investor.insertMany(records);
 
@@ -233,15 +168,16 @@ exports.uploadCSV = async (req, res) => {
 
 exports.getAllInvestors = async (req, res) => {
   try {
-    const investors = await Investor.find();
+    const { page = 1, limit = 10 } = req.query;
 
-    if (investors.length === 0) {
-      return res.status(404).json({
-        message: "No investors found",
-        totalCount: 0,
-        data: [],
-      });
-    }
+    const parsedPage = parseInt(page);
+    const parsedLimit = parseInt(limit);
+    const skip = (parsedPage - 1) * parsedLimit;
+
+    const [investors, totalCount] = await Promise.all([
+      Investor.find().sort({ createdAt: -1 }).skip(skip).limit(parsedLimit),
+      Investor.countDocuments(),
+    ]);
 
     const formattedInvestors = investors.map((investor) => ({
       ...investor.toObject(),
@@ -257,8 +193,10 @@ exports.getAllInvestors = async (req, res) => {
     }));
 
     res.status(200).json({
-      message: "Successfully retrieved all investors",
-      totalCount: formattedInvestors.length,
+      message: "Successfully retrieved investors",
+      totalCount,
+      currentPage: parsedPage,
+      totalPages: Math.ceil(totalCount / parsedLimit),
       data: formattedInvestors,
     });
   } catch (error) {
@@ -284,7 +222,7 @@ exports.updateInvestor = async (req, res) => {
     }
 
     const normalizedData = transformFrontendToDB
-      ? transformFrontendToDB(updateData, updateData.list_id)
+      ? transformFrontendToDB(updateData)
       : updateData;
 
     const investor = await Investor.findById(investorId);
